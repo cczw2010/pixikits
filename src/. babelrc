@@ -1,0 +1,12 @@
+{
+  "presets": [
+    [
+      "@babel/env",
+      {
+        "modules": false,
+        "useBuiltIns": "usage"    //值为 usage 的时候，无需引入 polyfill，babel 会自动按需加载需要的功能
+      }
+    ]
+  ],
+  "plugins": ["external-helpers"]
+}

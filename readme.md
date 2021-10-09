@@ -200,12 +200,6 @@ Name | Type | Attributes | Default | Desc |
 **`params`** |Object|\<optional> |  |样式设定，参见构造函数| 
 
 #### Slider. addChild(...)
->新增内容，重写了`Container.addChild`方法,会自动刷新滚动区域
-
-Name | Type | Attributes | Default | Desc |
----|:---|:---|:---|:---|
-**`percent`** |Float|<mark>\<required></mark> | 0 | 当前百分比
-**`movebar `** |Object|\<optional> |  true | 是否同时刷新滚动块位置
-
+>重写了`Container.addChild`方法,会自动刷新滚动区域
 
 

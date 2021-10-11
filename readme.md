@@ -41,7 +41,22 @@
     	<!--开始使用-->
     	const slider = new PixiKits.Slider({...});
 
+3. rollup
+   
+	如果项目使用rollup打包，那么需要在rollup中增加一下代码：
 
+		...
+		external:["pixi.js","@pixi/events","@pixi/core"],      // 告诉rollup，不打包的库，将其视为外部依赖
+		...
+		globals: { 
+			"pixi.js": 'PIXI',      // 指明pixi.js库即是外部依赖PIXI
+			"@pixi/events":"PIXI",   //浏览器引入events.js文件后，会将EventSystem对象集成到PIXI
+			"@pixi/core":"PIXI", 	//同样不用打包
+		}
+		...
+
+	前端只需要引入`pixi.js`和`events.js`就可正常运行，不需要加载前端的`pixikits.js`文件。如果想在前端自己加载`pixikits.js`文件，在上面的配置中增加配置项不打包即可 。
+	
 ### browser
 
 1. 页面上显示引入@pixi/events插件的browser文件和pixikits的brower文件
@@ -202,4 +217,59 @@ Name | Type | Attributes | Default | Desc |
 #### Slider. addChild(...)
 >重写了`Container.addChild`方法,会自动刷新滚动区域
 
+### <div style="color:red">PixiKits.ProgressBar</div> 
+继承`PIXI.Container`实现的进度条类
 
+	const processBar = new PixiKits.ProgressBar({
+      width:200,
+      height:20,
+      percent:0.5,
+      background:PIXI.utils.TextureCache.input,
+      progress:PIXI.utils.TextureCache.progress,
+      icon:resources.spritesheet.spritesheet.animations.iconfly
+    });
+    processBar.icon.animationSpeed =0.2;
+    //processBar.setPercent(0.5);
+    app.stage.addChild(processBar);
+
+### <div style="color:blue">Constructor</div>
+Name | Attributes | Type | Default | Desc |
+---|:---|:---|:---|:---|
+**`params`** |<mark>\<required></mark> | Object| |参数设定
+ | width | Int | 0 | 宽度，如果background和progress不是颜色，可以不设置使用自身宽高
+ | height| Int | 0 | 高度，如果background和progress不是颜色，可以不设置使用自身宽高
+ | percent |float | 0 | 进度 0~1
+ | background | Hex \| PIXI.Texture \| Array\<PIXI.Texture> | 0xe2e2e2| 背景素材
+ | progress | Hex \| PIXI.Texture \| Array\<PIXI.Texture>e=| 0Xffffff| 滚动条素材
+ | icon | PIXI.Texture \| Array\<PIXI.Texture> | null | 可以在进度条前设置一个前进的图标
+### <div style="color:blue">Members</div>
+	
+name | value| desc |
+---|:---|:---|
+**`percent`** | Float | 当前进度0~1  |
+**`background`** | Sprite \| AnimatedSprite | 背景对象  |
+**`progress`** | Sprite \| AnimatedSprite | 进度条对象  |
+**`icon`** | Sprite \| AnimatedSprite | 进度条`前置图标对象  |
+
+### <div style="color:blue">Methods</div>
+
+#### Scroller.setPercent(percent)
+>设定当前滚动条的进度
+
+Name | Type | Attributes | Default | Desc |
+---|:---|:---|:---|:---|
+**`percent`** |Float |  |进度0~1| 
+
+#### Scroller.setBackground(background)
+>重新设置背景对象
+
+Name | Type | Attributes | Default | Desc |
+---|:---|:---|:---|:---|
+**`background`** |Hex \| PIXI.Texture \| Array\<PIXI.Texture> | <mark>\<required></mark> |背景素材| 
+
+#### Scroller.setProgress(progress)
+>重新设置滚动条对象
+
+Name | Type | Attributes | Default | Desc |
+---|:---|:---|:---|:---|
+**`progress `** |Hex \| PIXI.Texture \| Array\<PIXI.Texture> | <mark>\<required></mark> |滚动条素材| 

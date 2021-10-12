@@ -236,11 +236,11 @@ Name | Type | Attributes | Default | Desc |
 Name | Attributes | Type | Default | Desc |
 ---|:---|:---|:---|:---|
 **`params`** |<mark>\<required></mark> | Object| |参数设定
- | width | Int | 0 | 宽度，如果background和progress不是颜色，可以不设置使用自身宽高
- | height| Int | 0 | 高度，如果background和progress不是颜色，可以不设置使用自身宽高
+ | width | Int | 0 | 宽度，如果background和progress不是颜色，可以不设置使用自身宽度
+ | height| Int | 0 | 高度，如果background和progress不是颜色，可以不设置使用自身高度
  | percent |float | 0 | 进度 0~1
  | background | Hex \| PIXI.Texture \| Array\<PIXI.Texture> | 0xe2e2e2| 背景素材
- | progress | Hex \| PIXI.Texture \| Array\<PIXI.Texture>e=| 0Xffffff| 滚动条素材
+ | progress | Hex \| PIXI.Texture \| Array\<PIXI.Texture>e=| 0x65d521| 滚动条素材
  | icon | PIXI.Texture \| Array\<PIXI.Texture> | null | 可以在进度条前设置一个前进的图标
 ### <div style="color:blue">Members</div>
 	

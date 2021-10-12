@@ -47,63 +47,63 @@ import {dragable} from "./eventsExt.js";
       }
     });
   }
- 
-}
-// 重新设置参数，并刷新
-Slider.prototype.refresh = function(params={}){
-  this.params = Object.assign({},this.params,params);
-  if(this.params.widthBar <= 0){
-    this.params.widthBar = this.params.width;
-  }
-  this._drawBg();
-  this._drawBar();
-  this.alpha=this.params.alpha;
+  // 重新设置参数，并刷新
+  refresh(params={}){
+    this.params = Object.assign({},this.params,params);
+    if(this.params.widthBar <= 0){
+      this.params.widthBar = this.params.width;
+    }
+    this._drawBg();
+    this._drawBar();
+    this.alpha=this.params.alpha;
 
-  this.maxMovement = this.params.length-this.params.lengthBar;
-  this.maxMovement = this.maxMovement<0?0:this.maxMovement;
-  let percent = this.maxMovement==0?0:this.bar.position.y/this.maxMovement;
-  this.setPercent(percent);
-};
+    this.maxMovement = this.params.length-this.params.lengthBar;
+    this.maxMovement = this.maxMovement<0?0:this.maxMovement;
+    let percent = this.maxMovement==0?0:this.bar.position.y/this.maxMovement;
+    this.setPercent(percent);
+  }
+  /**
+   * 主动设置滚动条区域的激活状态
+   * @param {boolean} active  是否激活状态
+   */
+  setActive(active=ture){
+    this.alpha=active?this.params.alphaActive:this.params.alpha;
+  }
+  /**
+   * 手动设置百分比
+   */
+  setPercent(percent,movebar=true){
+    percent =percent>1?1:(percent<0?0:percent);
+    this.percent = percent;
+    if(movebar){
+      this.bar.position.y = parseInt(this.maxMovement*percent);
+    }
+  }
 
-/**
- * 主动设置滚动条区域的激活状态
- * @param {boolean} active  是否激活状态
- */
-Slider.prototype.setActive=function(active=ture){
-  this.alpha=active?this.params.alphaActive:this.params.alpha;
-};
-/**
- * 手动设置百分比
- */
-Slider.prototype.setPercent = function(percent,movebar=true){
-  percent =percent>1?1:(percent<0?0:percent);
-  this.percent = percent;
-  if(movebar){
-    this.bar.position.y = parseInt(this.maxMovement*percent);
-  }
-};
-// 绘制bar
-Slider.prototype._drawBar = function(){
-  if(!this.bar){
-    this.bar = this.addChild(new Graphics());
-  }
-  this.bar.clear();
-  this.bar.beginFill(this.params.colorBar)
-      .drawRoundedRect(0,0,this.params.widthBar,this.params.lengthBar,10)
-      .endFill();
-  this.bar.pivot.set(this.params.widthBar/2,0);
-};
-// 绘制bg
-Slider.prototype._drawBg = function(){
-  if(!this.bg){
-    this.bg = this.addChild(new Graphics());
-  }
-  this.bg.clear();
-  this.bg.beginFill(this.params.color)
-        .drawRoundedRect(0,0,this.params.width,this.params.length,1)
+  // 绘制bar
+  _drawBar(){
+    if(!this.bar){
+      this.bar = this.addChild(new Graphics());
+    }
+    this.bar.clear();
+    this.bar.beginFill(this.params.colorBar)
+        .drawRoundedRect(0,0,this.params.widthBar,this.params.lengthBar,10)
         .endFill();
-  this.bg.pivot.set(this.params.width/2,0);
-};
+    this.bar.pivot.set(this.params.widthBar/2,0);
+  }
+  // 绘制bg
+  _drawBg(){
+    if(!this.bg){
+      this.bg = this.addChild(new Graphics());
+    }
+    this.bg.clear();
+    this.bg.beginFill(this.params.color)
+          .drawRoundedRect(0,0,this.params.width,this.params.length,1)
+          .endFill();
+    this.bg.pivot.set(this.params.width/2,0);
+  }
+}
+
 // 拖动滚动条的默认样式
 Slider.__defOptions = {
   length:200,

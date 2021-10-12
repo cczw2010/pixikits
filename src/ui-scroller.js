@@ -15,6 +15,7 @@ import {Container,Graphics} from "pixi.js";
  *  }
  */
  class Scroller extends Container{
+  //  构造函数
   constructor(scrolParams={}){
     super();
     this.scrollParams = Scroller.__defScrollOptions;
@@ -69,7 +70,40 @@ import {Container,Graphics} from "pixi.js";
       }
     });
   }
-
+  // 重写addChild，自动刷新容器
+  addChild(...childs){
+    this.content.addChild(...childs);
+    this.refresh();
+    return childs[0];
+  }
+  /**
+   * 刷新Scroller。主要是重新计算内容尺寸和滚动条
+   * Scroller.addChild 会自动计算一次，但是如果是内部的对象自己增加子对象或者自己变换尺寸并不会触发refresh ，这时候就需要自己调用刷新
+   * @param object params 可以在这里重新设置参数
+   */
+  refresh(params={}){
+    this.scrollParams = Object.assign({},this.scrollParams,params);
+    this.hasSlider = this.scrollParams.slideBar?true:false;
+    if(this.hasSlider){
+      this.sliderParams = Object.assign({},this.sliderParams,params.slideBar);
+    }
+    this._drawBg();
+    this._drawSlider();
+  }
+  /**
+   * 设置横向百分比
+   * @param {float} percent  百分比
+   */
+  _refreshPercent = function(){
+    if(this.sliders.x){
+      this.sliders.x.setPercent(this.percent.x);
+    }
+    if(this.sliders.y){
+      this.sliders.y.setPercent(this.percent.y);
+    }
+    this.content.position.x = this.contentLimitPos.x*this.percent.x;
+    this.content.position.y = this.contentLimitPos.y*this.percent.y;
+  }
   // 绘制或者更新背景
   _drawBg (){
     if(!this.bg){
@@ -89,7 +123,6 @@ import {Container,Graphics} from "pixi.js";
       .endFill();
     this.mask = this.bgMask;
   }
-
   // 绘制或者更新滚动条
   _drawSlider(){
     const contentWidth = this.content.width;
@@ -154,41 +187,6 @@ import {Container,Graphics} from "pixi.js";
     this._refreshPercent();
   }
 }
-// 重写addChild
-Scroller.prototype.addChild = function(...childs){
-  this.content.addChild(...childs);
-  this.refresh();
-  return childs[0];
-};
-/**
- * 刷新Scroller。主要是重新计算内容尺寸和滚动条
- * Scroller.addChild 会自动计算一次，但是如果是内部的对象自己增加子对象或者自己变换尺寸并不会触发refresh ，这时候就需要自己调用刷新
- * @param object params 可以在这里重新设置参数
- */
-Scroller.prototype.refresh = function(params={}){
-  this.scrollParams = Object.assign({},this.scrollParams,params);
-  this.hasSlider = this.scrollParams.slideBar?true:false;
-  if(this.hasSlider){
-    this.sliderParams = Object.assign({},this.sliderParams,params.slideBar);
-  }
-  this._drawBg();
-  this._drawSlider();
-};
-
-/**
- * 设置横向百分比
- * @param {float} percent  百分比
- */
-Scroller.prototype._refreshPercent = function(){
-  if(this.sliders.x){
-    this.sliders.x.setPercent(this.percent.x);
-  }
-  if(this.sliders.y){
-    this.sliders.y.setPercent(this.percent.y);
-  }
-  this.content.position.x = this.contentLimitPos.x*this.percent.x;
-  this.content.position.y = this.contentLimitPos.y*this.percent.y;
-};
 // 默认滚动区域配置
 Scroller.__defScrollOptions = {
   width:350,

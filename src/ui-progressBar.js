@@ -1,5 +1,5 @@
-import {Container,Texture,Graphics,Sprite,AnimatedSprite} from "pixi.js"
-
+import {Container,Graphics} from "pixi.js"
+import {drawSprite} from "./global.js";
 // 默认参数
 const defaultParams = {
   percent:0,
@@ -11,29 +11,8 @@ const defaultParams = {
 };
 // 实际参数
 const actualParams = {};
-
+// mask
 const progressMask = new Graphics();
-// 绘制对象，tc可以是颜色，可以是Texture或者AnimatedSprite的纹理数组。
-const drawObject = (tc,autoWidth=false)=>{
-  let object,autoSize=true;
-  if(Number.isInteger(tc)){
-    object = new Sprite(Texture.WHITE);
-    object.tint = tc;
-  }else if(Array.isArray(tc)){
-    object = new AnimatedSprite(tc,true);
-    object.animationSpeed = 0.5;
-    object.play();
-  }else{
-    object = new Sprite(tc);
-  }
-  if(!autoWidth && actualParams.width){
-    object.width = actualParams.width;
-  }
-  if(!autoWidth && actualParams.height){
-    object.height = actualParams.height;
-  }
-  return object;
-};
 
 /**
  * ProgressBar组件
@@ -50,8 +29,7 @@ export class ProgressBar extends Container{
     this.addChild(progressMask);
     this.icon = null;
     if(actualParams.icon){
-      this.icon = this.addChild(drawObject(actualParams.icon,true));
-      this.icon.anchor.set(0.5);
+      this.icon = this.addChild(drawSprite(actualParams.icon));
       this.icon.zIndex =2;
     }
 
@@ -72,7 +50,7 @@ export class ProgressBar extends Container{
       this.removeChild(this.background);
       this.background.destory({children:true});
     }
-    this.background = this.addChild(drawObject(background));
+    this.background = this.addChild(drawSprite(background,actualParams.width,actualParams.height));
     this.background.zIndex = 0;
   }
   /**
@@ -88,7 +66,7 @@ export class ProgressBar extends Container{
       this.removeChild(this.progress);
       this.progress.destory();
     }
-    this.progress = this.addChild(drawObject(progress));
+    this.progress = this.addChild(drawSprite(progress,actualParams.width,actualParams.height));
     this.progress.zIndex = 1;
     this.progress.mask = progressMask;
 

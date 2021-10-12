@@ -103,15 +103,15 @@ Name | Type  | Attributes | Default | Desc |
 #### PixiKits.dragable(object,params={})
 >使对象可拖拽
 
-Name | Type | Attributes | Default | Desc |
+Name  | Attributes| Type | Default | Desc |
 ---|:---|:---|:---|:---|
-**`object`** |Pixi.DisplayObject| <mark>required</mark>  |  | 要实现拖拽功能的对象
-**`params`** |Object| \<optional>  |  | 相关参数
- | | dragX  | true | 是否开启横向拖拽
- | | dragY  | true | 是否开启纵向拖拽
- | | onStart  | null | 拖拽开始的回调
- | | onMove  | null | 拖拽中的回调.返回`false`会阻止自动拖拽行为， `event.nextPosition`代表下一个位置的local坐标对象，`e.distance`代表移动的总距离对象
- | | onEnd  | null | 开始结束的回调，`e.distance`代表移动的总距离对象
+**`object`** | <mark>required</mark> |Pixi.DisplayObject |  | 要实现拖拽功能的对象
+**`params`** | \<optional> |Object |  | 相关参数
+ | dragX  | Boolean | true | 是否开启横向拖拽
+ | dragY  | Boolean | true | 是否开启纵向拖拽
+ | onStart | Function \| Null | null | 拖拽开始的回调
+ | onMove  |Function \| Null | null | 拖拽中的回调.返回`false`会阻止自动拖拽行为， `event.nextPosition`代表下一个位置的local坐标对象，`e.distance`代表移动的总距离对象
+ | onEnd  |Function \| Null | null | 开始结束的回调，`e.distance`代表移动的总距离对象
 
 
 #### PixiKits.tap(object,cb)
@@ -135,24 +135,28 @@ Name | Type | Attributes | Default | Desc |
 	app.stage.addChild(slider);
 
 ### <div style="color:blue">Constructor</div>
-Name | Type | Attributes | Default | Desc |
+Name | Attributes | Type | Default | Desc |
 ---|:---|:---|:---|:---|
-**`params`** |Object|\<optional> |  |样式设定
- | | length  | 200 | 滚动条总长度
- | | lengthBar  | 20 | 滚动块的长度，可根据内容区域大小比来设定
- | | width  | 10| 滚动条的宽度
- | | widthBar  | 0 | 默认0，与with相同
- | | color  | 0xffffff | 滚动条颜色
- | | colorBar  | 0Xff3300 | 滚动块颜色
- | | alpha  | 0.4 | 初始透明度
- | | alphaActive  | 0.8 | 激活后的透明度
-**cb** |Function| \<optional>  | null | 滚动是的回调函数,传入`percent`参数|
+**`params`** |\<optional> |Object|  |样式设定
+ |length |  Number | 200 | 滚动条总长度
+ |lengthBar | Number | 20 | 滚动块的长度，可根据内容区域大小比来设定
+ |width | Number | 10| 滚动条的宽度
+ |widthBar | Number | 0 | 默认0，与with相同
+ |color  |Hex| 0xffffff | 滚动条颜色
+ |colorBar | Hex | 0Xff3300 | 滚动块颜色
+ |alpha  | Number | 0.4 | 初始透明度0~1
+ |alphaActive  | Number | 0.8 | 激活后的透明度0~1
+**cb**| \<optional>  |Function | null | 滚动是的回调函数,传入`percent`参数|
 
 ### <div style="color:blue">Members</div>
 	
 name | value| desc |
 ---|:---|:---|
-**`percent`** | Float | 当前滚动条百分比  |
+**`percent`** | Number | 当前滚动条百分比0~1  |
+**`maxMovement`** | Number | 当前滚动条最大滚动长度  |
+**`bg`** | Graphics | 背景对象  |
+**`bar`** | Graphics | 滚动块对象  |
+
 
 ### <div style="color:blue">Methods</div>
 
@@ -168,8 +172,8 @@ Name | Type | Attributes | Default | Desc |
 
 Name | Type | Attributes | Default | Desc |
 ---|:---|:---|:---|:---|
-**`percent`** |Float|<mark>\<required></mark> | 0 | 当前百分比
-**`movebar `** |Object|\<optional> |  true | 是否同时刷新滚动块位置
+**`percent`** |Number|<mark>\<required></mark> | 0 | 当前百分比 0~1
+**`movebar `** |Boolean|\<optional> |  true | 是否同时刷新滚动块位置, 一般用于第三方开发扩展
 
 
 #### Slider.setActive(active)
@@ -188,15 +192,15 @@ Name | Type | Attributes | Default | Desc |
 	scroller.addChild(...);
 
 ### <div style="color:blue">Constructor</div>
-Name | Type | Attributes | Default | Desc |
+Name | Attributes | Type | Default | Desc |
 ---|:---|:---|:---|:---|
-**`params`** |Object|\<optional> |  |样式设定
- | | width  | 300 | 内容区域宽度
- | | height  | 200 | 内容区域高度
- | | x  | true | 是否开启横向滚动
- | | y  | true| 是否开启纵向滚动
- | | bgColor  | 0Xffffff| 背景颜色
- | | slideBar  | false | 如需显示滚动条，传入`Slider`对象的参数对象，`{}`代表使用`Slider`的默认参数
+**`params`**|\<optional>  |Object|  |样式设定
+ |width | Number | 300 | 内容区域宽度
+ |height | Number | 200 | 内容区域高度
+ |x | Boolean | true | 是否开启横向滚动
+ |y | Boolean | true| 是否开启纵向滚动
+ |bgColor | Hex | 0Xffffff| 背景颜色
+ |slideBar | Object \| Boolean | false | 如需显示滚动条，传入`Slider`对象的参数对象，`{}`代表使用`Slider`的默认参数
 
 ### <div style="color:blue">Members</div>
 	
@@ -204,6 +208,7 @@ name | value| desc |
 ---|:---|:---|
 **`percent`** | Object | 当前Scroller的横向和纵向百分比  |
 **`sliders`** | Object | 横向和纵向滚动条对象（如果有的话）  |
+**`content`** | PIXI.Container | 内容区域容器对象 |
 
 ### <div style="color:blue">Methods</div>
 
@@ -215,7 +220,7 @@ Name | Type | Attributes | Default | Desc |
 **`params`** |Object|\<optional> |  |样式设定，参见构造函数| 
 
 #### Slider. addChild(...)
->重写了`Container.addChild`方法,会自动刷新滚动区域
+>重写了`Container.addChild`方法,会自动调用`refresh`方法刷新滚动条
 
 ### <div style="color:red">PixiKits.ProgressBar</div> 
 继承`PIXI.Container`实现的进度条类

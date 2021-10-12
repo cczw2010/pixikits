@@ -52,6 +52,6 @@ export default {
       exclude: 'node_modules/**', // 只编译我们的源代码,排除node_mouldes下的
     }),
     json(),
-    terser()
+    // terser()
   ]
 };

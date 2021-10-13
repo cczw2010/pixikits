@@ -55,7 +55,7 @@
 		}
 		...
 
-	前端只需要引入`pixi.js`和`events.js`就可正常运行，不需要加载前端的`pixikits.js`文件。如果想在前端自己加载`pixikits.js`文件，在上面的配置中增加配置项不打包即可 。
+	前端只需要引入`pixi.js`和`events.js`就可正常运行，不需要加载前端的`pixikits.js`文件。如果想在前端自己加载`pixikits.js`文件(有时rollup打包关联的库文件时会出现各种问题)，在上面的配置中增加配置项不打包即可 。
 	
 ### browser
 

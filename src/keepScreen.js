@@ -5,7 +5,7 @@ export let isSkew = false;
 let orientation = "v";
 /**
  * 全屏化并保持舞台的方向
- * @param {string} direction 方向，h横向（默认），v纵向
+ * @param {string} direction 方向，h横向，v纵向（默认）
  * @return {object} StageSize 程序逻辑意义上的宽高，比如保持横屏翻转后，高就是宽
  */
 function keepScreen(direction) {

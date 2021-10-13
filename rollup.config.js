@@ -15,7 +15,7 @@ import nodeGlobals from 'rollup-plugin-node-globals';
 import json from '@rollup/plugin-json';
 import { terser } from "rollup-plugin-terser";  //压缩
 
-const version = 1.0;
+const version = "1.0.1";
 
 export default {
   input: 'src/index.js',
@@ -51,7 +51,7 @@ export default {
       babelHelpers: 'bundled',
       exclude: 'node_modules/**', // 只编译我们的源代码,排除node_mouldes下的
     }),
-    json(),
+    json()
     // terser()
   ]
 };

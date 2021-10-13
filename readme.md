@@ -77,45 +77,47 @@
     	PixiKits.keepScreen("h");
     	...
 
+3. [Demo](https://codepen.io/cczw2010/pen/RwZPGbR)
+
 ## Document
 
 ### <div style="color:blue">Members</div>
-name |  value| desc |
+Name | Value| Desc |
 ---|:---|:---|
 **`isSkew`** | Boolean | 是否翻转了stage, 受`keepScreen`方法影响  |
 
 ### <div style="color:blue">Methods</div>
 
 #### PixiKits.init(app)
->初始化，必须在使用之前调用该方法初始化，初始化之后将使用新的事件系统**`EventSystem(@pixi/events)`**，可能会影响已有的使用老的事件系统的代码
+初始化，必须在使用之前调用该方法初始化，初始化之后将使用新的事件系统**`EventSystem(@pixi/events)`**，可能会影响已有的使用老的事件系统的代码
 
 Name | Type  | Attributes | Default | Desc |
 ---|:---|:---|:---|:---|
 **`app`** |PIXI.Application|  <mark>required</mark> |  |  初始化的应用
 
 #### PixiKits.keepScreen(direction)
->保持stage的逻辑绘制方向为横屏或者纵屏
+保持stage的逻辑绘制方向为横屏或者纵屏
 
 Name | Type  | Attributes | Default | Desc |
 ---|:---|:---|:---|:---|
 **`direction`** |String| \<optional>  | v | 设置当前stage的绘制方向，保持横屏还是枞屏<br>`h` 横向 ,`v` 纵向 |
 
 #### PixiKits.dragable(object,params={})
->使对象可拖拽
+使对象可拖拽
 
 Name  | Attributes| Type | Default | Desc |
 ---|:---|:---|:---|:---|
-**`object`** | <mark>required</mark> |Pixi.DisplayObject |  | 要实现拖拽功能的对象
-**`params`** | \<optional> |Object |  | 相关参数
- | dragX  | Boolean | true | 是否开启横向拖拽
- | dragY  | Boolean | true | 是否开启纵向拖拽
- | onStart | Function \| Null | null | 拖拽开始的回调
- | onMove  |Function \| Null | null | 拖拽中的回调.返回`false`会阻止自动拖拽行为， `event.nextPosition`代表下一个位置的local坐标对象，`e.distance`代表移动的总距离对象
- | onEnd  |Function \| Null | null | 开始结束的回调，`e.distance`代表移动的总距离对象
+|**`object`** | <mark>required</mark> |Pixi.DisplayObject |  | 要实现拖拽功能的对象
+|**`params`** | \<optional> |Object |  | 相关参数
+| | dragX  | Boolean | true | 是否开启横向拖拽
+| | dragY  | Boolean | true | 是否开启纵向拖拽
+| | onStart | Function \| Null | null | 拖拽开始的回调
+| | onMove  |Function \| Null | null | 拖拽中的回调.返回`false`会阻止自动拖拽行为， `event.nextPosition`代表下一个位置的local坐标对象，`e.distance`代表移动的总距离对象
+| | onEnd  |Function \| Null | null | 开始结束的回调，`e.distance`代表移动的总距离对象
 
 
 #### PixiKits.tap(object,cb)
->使对象可点击，主要针对新事件体系click做了移动端兼容（当前阶段事件体系的click移动端不是很好用）
+使对象可点击，主要针对新事件体系click做了移动端兼容（当前阶段事件体系的click移动端不是很好用）
 
 Name | Type | Attributes | Default | Desc |
 ---|:---|:---|:---|:---|
@@ -137,20 +139,20 @@ Name | Type | Attributes | Default | Desc |
 ### <div style="color:blue">Constructor</div>
 Name | Attributes | Type | Default | Desc |
 ---|:---|:---|:---|:---|
-**`params`** |\<optional> |Object|  |样式设定
- |length |  Number | 200 | 滚动条总长度
- |lengthBar | Number | 20 | 滚动块的长度，可根据内容区域大小比来设定
- |width | Number | 10| 滚动条的宽度
- |widthBar | Number | 0 | 默认0，与with相同
- |color  |Hex| 0xffffff | 滚动条颜色
- |colorBar | Hex | 0Xff3300 | 滚动块颜色
- |alpha  | Number | 0.4 | 初始透明度0~1
- |alphaActive  | Number | 0.8 | 激活后的透明度0~1
-**cb**| \<optional>  |Function | null | 滚动是的回调函数,传入`percent`参数|
+|**`params`** |\<optional> |Object|  |样式设定
+| |length |  Number | 200 | 滚动条总长度
+| |lengthBar | Number | 20 | 滚动块的长度，可根据内容区域大小比来设定
+| |width | Number | 10| 滚动条的宽度
+| |widthBar | Number | 0 | 默认0，与with相同
+| |color  |Hex| 0xffffff | 滚动条颜色
+| |colorBar | Hex | 0Xff3300 | 滚动块颜色
+| |alpha  | Number | 0.4 | 初始透明度0~1
+| |alphaActive  | Number | 0.8 | 激活后的透明度0~1
+|**cb**| \<optional>  |Function | null | 滚动是的回调函数,传入`percent`参数|
 
 ### <div style="color:blue">Members</div>
 	
-name | value| desc |
+Name | Value| Desc |
 ---|:---|:---|
 **`percent`** | Number | 当前滚动条百分比0~1  |
 **`maxMovement`** | Number | 当前滚动条最大滚动长度  |
@@ -161,14 +163,14 @@ name | value| desc |
 ### <div style="color:blue">Methods</div>
 
 #### Slider.refresh(params)
->刷新slider参数设置
+刷新slider参数设置
 
 Name | Type | Attributes | Default | Desc |
 ---|:---|:---|:---|:---|
 **`params`** |Object|\<optional> |  |样式设定，参见构造函数| 
 
 #### Slider.setPercent(percent,movebar)
->刷新slider参数设置
+刷新slider参数设置
 
 Name | Type | Attributes | Default | Desc |
 ---|:---|:---|:---|:---|
@@ -177,7 +179,7 @@ Name | Type | Attributes | Default | Desc |
 
 
 #### Slider.setActive(active)
->刷新slider参数设置
+刷新slider参数设置
 
 Name | Type | Attributes | Default | Desc |
 ---|:---|:---|:---|:---|
@@ -194,17 +196,17 @@ Name | Type | Attributes | Default | Desc |
 ### <div style="color:blue">Constructor</div>
 Name | Attributes | Type | Default | Desc |
 ---|:---|:---|:---|:---|
-**`params`**|\<optional>  |Object|  |样式设定
- |width | Number | 300 | 内容区域宽度
- |height | Number | 200 | 内容区域高度
- |x | Boolean | true | 是否开启横向滚动
- |y | Boolean | true| 是否开启纵向滚动
- |bgColor | Hex | 0Xffffff| 背景颜色
- |slideBar | Object \| Boolean | false | 如需显示滚动条，传入`Slider`对象的参数对象，`{}`代表使用`Slider`的默认参数
+|**`params`**|\<optional>  |Object|  |样式设定
+| |width | Number | 300 | 内容区域宽度
+| |height | Number | 200 | 内容区域高度
+| |x | Boolean | true | 是否开启横向滚动
+| |y | Boolean | true| 是否开启纵向滚动
+| |bgColor | Hex | 0Xffffff| 背景颜色
+| |slideBar | Object \| Boolean | false | 如需显示滚动条，传入`Slider`对象的参数对象，`{}`代表使用`Slider`的默认参数
 
 ### <div style="color:blue">Members</div>
 	
-name | value| desc |
+Name | Value| Desc |
 ---|:---|:---|
 **`percent`** | Object | 当前Scroller的横向和纵向百分比  |
 **`sliders`** | Object | 横向和纵向滚动条对象（如果有的话）  |
@@ -213,14 +215,14 @@ name | value| desc |
 ### <div style="color:blue">Methods</div>
 
 #### Scroller.refresh(params)
->刷新Scroller，该方法会重新计算内容尺寸和滚动条位置。比如内部的对象自己新增子对象或者自己变换尺寸时Scroller是无感的，需要手动调用本方法计算 刷新UI。也可传入参数重新设定样式。
+刷新Scroller，该方法会重新计算内容尺寸和滚动条位置。比如内部的对象自己新增子对象或者自己变换尺寸时Scroller是无感的，需要手动调用本方法计算 刷新UI。也可传入参数重新设定样式。
 
 Name | Type | Attributes | Default | Desc |
 ---|:---|:---|:---|:---|
 **`params`** |Object|\<optional> |  |样式设定，参见构造函数| 
 
 #### Slider. addChild(...)
->重写了`Container.addChild`方法,会自动调用`refresh`方法刷新滚动条
+重写了`Container.addChild`方法,会自动调用`refresh`方法刷新滚动条
 
 ### <div style="color:red">PixiKits.ProgressBar</div> 
 继承`PIXI.Container`实现的进度条类
@@ -240,16 +242,16 @@ Name | Type | Attributes | Default | Desc |
 ### <div style="color:blue">Constructor</div>
 Name | Attributes | Type | Default | Desc |
 ---|:---|:---|:---|:---|
-**`params`** |<mark>\<required></mark> | Object| |参数设定
- | width | Int | 0 | 宽度，如果background和progress不是颜色，可以不设置使用自身宽度
- | height| Int | 0 | 高度，如果background和progress不是颜色，可以不设置使用自身高度
- | percent |float | 0 | 进度 0~1
- | background | Hex \| PIXI.Texture \| Array\<PIXI.Texture> | 0xe2e2e2| 背景素材
- | progress | Hex \| PIXI.Texture \| Array\<PIXI.Texture>e=| 0x65d521| 滚动条素材
- | icon | PIXI.Texture \| Array\<PIXI.Texture> | null | 可以在进度条前设置一个前进的图标
+|**`params`** |<mark>\<required></mark> | Object| |参数设定
+| | width | Int | 0 | 宽度，如果background和progress不是颜色，可以不设置使用自身宽度
+| | height| Int | 0 | 高度，如果background和progress不是颜色，可以不设置使用自身高度
+| | percent |float | 0 | 进度 0~1
+| | background | Hex \| PIXI.Texture \| Array\<PIXI.Texture> | 0xe2e2e2| 背景素材
+| | progress | Hex \| PIXI.Texture \| Array\<PIXI.Texture>e=| 0x65d521| 滚动条素材
+| | icon | PIXI.Texture \| Array\<PIXI.Texture> | null | 可以在进度条前设置一个前进的图标
 ### <div style="color:blue">Members</div>
 	
-name | value| desc |
+Name | Value| Desc |
 ---|:---|:---|
 **`percent`** | Float | 当前进度0~1  |
 **`background`** | Sprite \| AnimatedSprite | 背景对象  |
@@ -259,21 +261,21 @@ name | value| desc |
 ### <div style="color:blue">Methods</div>
 
 #### Scroller.setPercent(percent)
->设定当前滚动条的进度
+设定当前滚动条的进度
 
 Name | Type | Attributes | Default | Desc |
 ---|:---|:---|:---|:---|
 **`percent`** |Float |  |进度0~1| 
 
 #### Scroller.setBackground(background)
->重新设置背景对象
+重新设置背景对象
 
 Name | Type | Attributes | Default | Desc |
 ---|:---|:---|:---|:---|
 **`background`** |Hex \| PIXI.Texture \| Array\<PIXI.Texture> | <mark>\<required></mark> |背景素材| 
 
 #### Scroller.setProgress(progress)
->重新设置滚动条对象
+重新设置滚动条对象
 
 Name | Type | Attributes | Default | Desc |
 ---|:---|:---|:---|:---|

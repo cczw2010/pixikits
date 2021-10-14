@@ -17,7 +17,6 @@ export function init(pixiApp){
 export {tap,dragable};
 export * from "./keepScreen.js";
 export * from "./ui-slider.js";
-export {Slider as Slider2} from "./ui-slider2.js";
 export * from "./ui-scroller.js";
 export * from "./ui-progressBar.js";
 export * from "./ui-spliceSprite.js";

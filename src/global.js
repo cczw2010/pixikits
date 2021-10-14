@@ -9,7 +9,7 @@ export let app = null;   //Application instance
  */
 export function init(pixiApp){
   app = pixiApp;
-};
+}
 
 /**
  * 绘制Sprite或者AnimationSprite通用方法

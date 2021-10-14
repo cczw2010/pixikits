@@ -83,11 +83,11 @@ function initEvent(){
  * @param {*} object   拖拽的对象
  * @param {*} params  
  *  {
- *    dragX:true,      //是否开启拖拽X
- *    dragY:true,      //是否开启拖拽Y
+ *    x:true,      //是否开启拖拽X
+ *    y:true,      //是否开启拖拽Y
  *    onStart,
- *    onMove,          //返回false会阻止自动拖拽行为， event.nextPosition代表下一个位置的local坐标，e.distance都代表移动的总距离
- *    onEnd            //e.distance都代表移动的总距离
+ *    onMove,      //返回false会阻止自动拖拽行为， event.nextPosition代表下一个位置的local坐标，e.distance都代表移动的总距离
+ *    onEnd        //e.distance都代表移动的总距离
  *  }
  */
  function dragable(object,params={}){
@@ -105,8 +105,8 @@ function initEvent(){
       startOffset,
       startLocal,
       item:object,
-      autoMoveX:params.dragX===false?false:true,
-      autoMoveY:params.dragY===false?false:true,
+      autoMoveX:params.x===false?false:true,
+      autoMoveY:params.y===false?false:true,
       onMove:params.onMove,
       onEnd:params.onEnd
     });

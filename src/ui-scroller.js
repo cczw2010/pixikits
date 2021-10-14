@@ -1,5 +1,5 @@
 import {dragable} from "./eventsExt.js";
-import {Slider} from "./ui-slider.js";
+import {Slider} from "./ui-slider2.js";
 import {Container,Graphics} from "pixi.js";
 /**
  *滚动区域Scroller，实例是Container的子类，内容区域不满不会显示滚动条
@@ -8,9 +8,10 @@ import {Container,Graphics} from "pixi.js";
  *  {
  *    width:300,    
  *    height:200,
- *    x:true,             //是否开启横向滚动
+ *    x:true,             //是否开启横向滚动,
  *    y:true,             //是否开启纵向滚动
- *    slideBar:false,     //开启滚动时候是否显示滚动条，设为false代表不显示，传入Slider的样式则显示滚动条（滚动条和滚动块的长度会自动计算）,默认为显示
+ *    slideBar:false,     //开启滚动时候是否显示滚动条，设为false代表不显示，传入配置对象则显示滚动条（滚动条和滚动块的长度会自动计算)
+ *                          {tx,ty,thin,alpha,alpaActive}
  *    bgColor:0xFFFFFF    //不设置的话默认白色
  *  }
  */
@@ -18,54 +19,56 @@ import {Container,Graphics} from "pixi.js";
   //  构造函数
   constructor(scrolParams={}){
     super();
-    this.scrollParams = Scroller.__defScrollOptions;
-    this.sliderParams = Slider.__defOptions;
-    this.hasSlider = true;
-    this.percent = {x:0,y:0};
-    // 总容器
-    this.sortableChildren = true;
+    this._scrollParams = Scroller.__defScrollOptions;
+    this._sliderParams = Slider.__defOptions;
+    this._hasSlider = true;
     // 内容最大滚动坐标
-    this.contentLimitPos ={x:0,y:0};
-    // 滚动条
-    this.sliders = {x:null,y:null};
+    this._contentLimitPos ={x:0,y:0};
     // 内容容器
     this.content = super.addChildAt(new Container(),0);
     this.content.zIndex = 2;
+    // 滚动条
+    this.sliderX = null;
+    this.sliderY = null;
+    this.percent = {x:0,y:0};
+
+    // 总容器
+    this.sortableChildren = true;
     // 刷新UI
     this.refresh(scrolParams);
     // 内容区域可拖动
     dragable(this,{
-      dragX:this.scrollParams.x,
-      dragY:this.scrollParams.y,
+      x:this._scrollParams.x,
+      y:this._scrollParams.y,
       onStart:(e)=>{
         this.startPos = this.content.position.clone();
-        if(this.sliders.x && this.contentLimitPos.x){
-          this.sliders.x.setActive(true);
+        if(this.sliderX && this._contentLimitPos.x){
+          this.sliderX.setActive(true);
         }
-        if(this.sliders.y && this.contentLimitPos.y){
-          this.sliders.y.setActive(true);
+        if(this.sliderY && this._contentLimitPos.y){
+          this.sliderY.setActive(true);
         }
       },
       onMove:(e)=>{
-        if(this.scrollParams.x && this.contentLimitPos.x){
+        if(this._scrollParams.x && this._contentLimitPos.x){
           let posx = this.startPos.x+e.distance.x;
-          posx=posx>0?0:(posx<this.contentLimitPos.x?this.contentLimitPos.x:posx);
-          this.percent.x = posx/this.contentLimitPos.x;
+          posx=posx>0?0:(posx<this._contentLimitPos.x?this._contentLimitPos.x:posx);
+          this.percent.x = posx/this._contentLimitPos.x;
         }
-        if(this.scrollParams.y && this.contentLimitPos.y){
+        if(this._scrollParams.y && this._contentLimitPos.y){
           let posy = this.startPos.y+e.distance.y;
-          posy=posy>0?0:(posy<this.contentLimitPos.y?this.contentLimitPos.y:posy);
-          this.percent.y = posy/this.contentLimitPos.y;
+          posy=posy>0?0:(posy<this._contentLimitPos.y?this._contentLimitPos.y:posy);
+          this.percent.y = posy/this._contentLimitPos.y;
         }
         this._refreshPercent();
         return false;
       },
       onEnd:(e)=>{
-        if(this.sliders.x ){
-          this.sliders.x.setActive(false);
+        if(this.sliderX ){
+          this.sliderX.setActive(false);
         }
-        if(this.sliders.y){
-          this.sliders.y.setActive(false);
+        if(this.sliderY){
+          this.sliderY.setActive(false);
         }
       }
     });
@@ -82,30 +85,45 @@ import {Container,Graphics} from "pixi.js";
    * @param object params 可以在这里重新设置参数
    */
   refresh(params={}){
-    this.scrollParams = Object.assign({},this.scrollParams,params);
-    this.hasSlider = this.scrollParams.slideBar?true:false;
-    if(this.hasSlider){
-      this.sliderParams = Object.assign({},this.sliderParams,params.slideBar);
+    this._scrollParams = Object.assign({},this._scrollParams,params);
+    this._hasSlider = this._scrollParams.slideBar?true:false;
+    if(this._hasSlider){
+      this._sliderParams = Object.assign({},this._sliderParams,params.slideBar);
     }
     this._drawBg();
-    this._drawSlider();
+    if(this._hasSlider && this._scrollParams.x){
+      this._drawSliderX();
+    }else if(this.sliderX){
+      this.removeChild(this.sliderX);
+      this.sliderX.destroy({children:true});
+      this.sliderX = null;
+    }
+    if(this._hasSlider && this._scrollParams.y){
+      this._drawSliderY();
+    }else if(this.sliderY){
+      this.removeChild(this.sliderY);
+      this.sliderY.destroy({children:true});
+      this.sliderY = null;
+    }
+    // 重置位置
+    this._refreshPercent();
   }
   /**
    * 设置横向百分比
    * @param {float} percent  百分比
    */
-  _refreshPercent = function(){
-    if(this.sliders.x){
-      this.sliders.x.setPercent(this.percent.x);
+  _refreshPercent(){
+    if(this.sliderX){
+      this.sliderX.setPercent(this.percent.x);
     }
-    if(this.sliders.y){
-      this.sliders.y.setPercent(this.percent.y);
+    if(this.sliderY){
+      this.sliderY.setPercent(this.percent.y);
     }
-    this.content.position.x = this.contentLimitPos.x*this.percent.x;
-    this.content.position.y = this.contentLimitPos.y*this.percent.y;
+    this.content.position.x = this._contentLimitPos.x*this.percent.x;
+    this.content.position.y = this._contentLimitPos.y*this.percent.y;
   }
   // 绘制或者更新背景
-  _drawBg (){
+  _drawBg(){
     if(!this.bg){
       this.bg = super.addChild(new Graphics());
       this.bg.zIndex=1;
@@ -113,78 +131,66 @@ import {Container,Graphics} from "pixi.js";
       // this.bg.zIndex=1;
     }
     this.bg.clear();
-    this.bg.beginFill(this.scrollParams.bgColor)
-      .drawRect(0, 0, this.scrollParams.width, this.scrollParams.height)
+    this.bg.beginFill(this._scrollParams.bgColor)
+      .drawRect(0, 0, this._scrollParams.width, this._scrollParams.height)
       .endFill();
 
     this.bgMask.clear();
     this.bgMask.beginFill()
-      .drawRect(0, 0, this.scrollParams.width, this.scrollParams.height)
+      .drawRect(0, 0, this._scrollParams.width, this._scrollParams.height)
       .endFill();
     this.mask = this.bgMask;
   }
-  // 绘制或者更新滚动条
-  _drawSlider(){
+  _drawSliderX(){
     const contentWidth = this.content.width;
-    const contentHeight = this.content.height;
-    const disx =this.scrollParams.width-contentWidth;
-    const disy =this.scrollParams.height-contentHeight;
-    this.contentLimitPos.x = disx>0?0:disx;
-    this.contentLimitPos.y = disy>0?0:disy;
-    // h slider
-    if(this.hasSlider && this.scrollParams.x){
-      let lengthBar = contentWidth==0?0:((this.scrollParams.width/contentWidth)*this.scrollParams.width);
-      const params = Object.assign({},this.sliderParams,{
-          length:this.scrollParams.width,
-          lengthBar
-        });  
-      if(!this.sliders.x){
-        this.sliders.x = new Slider(params,(percent)=>{
-          this.percent.x = percent;
-          this._refreshPercent();
-        });
-        this.sliders.x.zIndex=4;
-        this.sliders.x.position.set(0,this.scrollParams.height-this.sliders.x.width/2); 
-        this.sliders.x.angle = -90;
-        super.addChild(this.sliders.x);
-      }else{
-        this.sliders.x.refresh(params);
-      }
-      this.sliders.x.visible=(this.sliders.x.maxMovement>0);
-    }else if(this.sliders.x){
-      this.removeChild(this.sliders.x);
-      this.sliders.x.destroy({children:true});
-      this.sliders.x = null;
+    const disx =this._scrollParams.width-contentWidth;
+    this._contentLimitPos.x = disx>0?0:disx;
+    let barWidth = contentWidth==0?0:((this._scrollParams.width/contentWidth)*this._scrollParams.width);
+    const params = Object.assign({},this._sliderParams,{
+        background:{width:this._scrollParams.width},
+        bar:{width:barWidth},
+        dir:Slider.H,
+      });
+    if(!this.sliderX){
+      this.sliderX = new Slider(params,(percent)=>{
+        this.percent.x = percent;
+        this._refreshPercent();
+      });
+      this.sliderX.zIndex=4;
+      this.sliderX.position.set(0,this._scrollParams.height-this._sliderParams.background.height); 
+      super.addChild(this.sliderX);
+    }else{
+      this.sliderX.refresh(params);
     }
-    // v slider
-    if(this.hasSlider && this.scrollParams.y){
-      let length = this.scrollParams.height;
-      // 纵向滚动条的长度会减去横向滚动条的宽度，防止重叠
-      if(this.sliders.x && this.sliders.x.maxMovement>0){
-        length=length-this.sliders.x.width;
-      }
-      let lengthBar = contentHeight==0?0:((this.scrollParams.height/contentHeight)*this.scrollParams.height);
-      let params = Object.assign({},this.sliderParams,{length,lengthBar});
-      // console.log(params);
-      if(!this.sliders.y){
-        this.sliders.y = new Slider(params,(percent)=>{
+    this.sliderX.visible=(this.sliderX.maxMovement>0);
+  }
+  _drawSliderY(){
+    let height = this.content.height;
+    if(this.sliderX && this.sliderX.maxMovement>0){
+      height=height-this.sliderX.height;
+    }
+    const disy =this._scrollParams.height-height;
+    this._contentLimitPos.y = disy>0?0:disy;
+    // 要固定长度
+    const barHeight = height==0?0:((this._scrollParams.height/height)*this._scrollParams.height);
+    
+    const params = Object.assign({},this._sliderParams,{
+        background:{height},
+        bar:{height:barHeight},
+        dir:Slider.V,
+      });
+      if(!this.sliderY){
+        this.sliderY = new Slider(params,(percent)=>{
           this.percent.y = percent;
           this._refreshPercent();
         });
-        this.sliders.y.zIndex=5;
-        this.sliders.y.position.set(this.scrollParams.width-this.sliders.y.width/2,0);
-        super.addChild(this.sliders.y);
+        this.sliderY.zIndex=5;
+        this.sliderY.position.set(this._scrollParams.width-this.sliderY.width/2,0);
+        super.addChild(this.sliderY);
       }else{
-        this.sliders.y.refresh(params);
+        this.sliderY.refresh(params);
       }
-      this.sliders.y.visible=(this.sliders.y.maxMovement>0);
-    }else if(this.sliders.y){
-      this.removeChild(this.sliders.y);
-      this.sliders.y.destroy({children:true});
-      this.sliders.y = null;
-    }
-    // 重置位置
-    this._refreshPercent();
+      this.sliderY.visible=(this.sliderY.maxMovement>0);
   }
 }
 // 默认滚动区域配置

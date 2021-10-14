@@ -126,6 +126,7 @@ Name | Type | Attributes | Default | Desc |
 
 
 ## UI
+基本都是继承`Sprite`或者`Container`对象，下面的属性和方法只介绍新增或者变更的部分
 
 ### <div style="color:red">PixiKits.Slider</div>
 基于`dragable`实现的滚动条类，继承`PIXI.Container`
@@ -154,7 +155,7 @@ Name | Attributes | Type | Default | Desc |
 	
 Name | Value| Desc |
 ---|:---|:---|
-**`percent`** | Number | 当前滚动条百分比0~1  |
+**`percent`** | Float | 当前滚动条百分比0~1  |
 **`maxMovement`** | Number | 当前滚动条最大滚动长度  |
 **`bg`** | Graphics | 背景对象  |
 **`bar`** | Graphics | 滚动块对象  |
@@ -174,7 +175,7 @@ Name | Type | Attributes | Default | Desc |
 
 Name | Type | Attributes | Default | Desc |
 ---|:---|:---|:---|:---|
-**`percent`** |Number|<mark>\<required></mark> | 0 | 当前百分比 0~1
+**`percent`** | Float |<mark>\<required></mark> | 0 | 当前百分比 0~1
 **`movebar `** |Boolean|\<optional> |  true | 是否同时刷新滚动块位置, 一般用于第三方开发扩展
 
 
@@ -243,9 +244,9 @@ Name | Type | Attributes | Default | Desc |
 Name | Attributes | Type | Default | Desc |
 ---|:---|:---|:---|:---|
 |**`params`** |<mark>\<required></mark> | Object| |参数设定
-| | width | Int | 0 | 宽度，如果background和progress不是颜色，可以不设置使用自身宽度
-| | height| Int | 0 | 高度，如果background和progress不是颜色，可以不设置使用自身高度
-| | percent |float | 0 | 进度 0~1
+| | width | Number | 0 | 宽度，如果background和progress不是颜色，可以不设置使用自身宽度
+| | height| Number | 0 | 高度，如果background和progress不是颜色，可以不设置使用自身高度
+| | percent |Float | 0 | 进度 0~1
 | | background | Hex \| PIXI.Texture \| Array\<PIXI.Texture> | 0xe2e2e2| 背景素材
 | | progress | Hex \| PIXI.Texture \| Array\<PIXI.Texture>e=| 0x65d521| 滚动条素材
 | | icon | PIXI.Texture \| Array\<PIXI.Texture> | null | 可以在进度条前设置一个前进的图标
@@ -280,3 +281,23 @@ Name | Type | Attributes | Default | Desc |
 Name | Type | Attributes | Default | Desc |
 ---|:---|:---|:---|:---|
 **`progress `** |Hex \| PIXI.Texture \| Array\<PIXI.Texture> | <mark>\<required></mark> |滚动条素材| 
+
+### <div style="color:red">PixiKits.SpliceSprite</div> 
+继承`PIXI.Container`实现的一个拼合精灵简单对象，用于过大的图片素材分割后组成一个精灵，会根据当前显示区域的位置显示对应精灵切片，不会一次性全部绘制。(比如超长的一镜到底复杂背景图)
+
+	const bg = new PixiKits.SpliceSprite(
+      resources.spritesheet.spritesheet.animations.bg,
+      //resources:{a:t1,b:t2...}
+      //resources:[t1,t2,t3,...]
+      PixiKits.SpliceSprite.V
+    );
+    //bg.position.set(0,0);
+    app.stage.addChild(bg);
+
+### <div style="color:blue">Constructor</div>
+Name | Attributes | Type | Default | Desc |
+---|:---|:---|:---|:---|
+|**`textures`** |<mark>\<required></mark> | Array\|Object|  |材质数组或者json对象
+|**`dir`** |<mark>\<required></mark> | Number| |方向 ` SpliceSprite.H` or ` SpliceSprite.V`
+
+ 

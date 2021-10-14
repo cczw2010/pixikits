@@ -19,5 +19,6 @@ export * from "./keepScreen.js";
 export * from "./ui-slider.js";
 export * from "./ui-scroller.js";
 export * from "./ui-progressBar.js";
+export * from "./ui-spliceSprite.js";
 
 

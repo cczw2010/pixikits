@@ -13,12 +13,12 @@ export function init(pixiApp){
 
 /**
  * 绘制Sprite或者AnimationSprite通用方法
- * @export PIXI.Sprite|PIXI.AnimationSprite
+ * @export drawSprite
  * @param {Hex|PIXI.Texture|Array\<PIXI.Texture>}  tc   素材,可以是16位颜色值，也可以是Texture，也可以是AnimationSprite的Texture数组
  * @param {float} width  默认0，如果tc不是颜色，可以不设置使用纹理的宽度
  * @param {float} height 默认0，如果tc不是颜色，可以不设置使用纹理的高度
  * @param {boolean} [autoPlay=true] 如果tc是数组，这里设置生成的AnimationSprite是否自动播放
- * @returns
+ * @returns PIXI.Sprite|PIXI.AnimationSprite
  */
 export function drawSprite(tc,width,height,autoPlay=true){
   let object;
@@ -38,4 +38,4 @@ export function drawSprite(tc,width,height,autoPlay=true){
     object.height = height;
   }
   return object;
-};
+}

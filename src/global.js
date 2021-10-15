@@ -39,3 +39,35 @@ export function drawSprite(tc,width,height,autoPlay=true){
   }
   return object;
 }
+
+/**
+ *深层合并对象，用于参数合并，只遍历简单对象，其他值直接覆盖
+ *
+ * @export object
+ * @param {object} target
+ * @param {...object} rest
+ */
+export function deepAssign(target,...rest){
+  for(let obj of rest){
+    if(isSimpleObject(obj)){
+      for(let k in obj){
+        let val = obj[k];
+        if(isSimpleObject(val)){
+          target[k] = val;
+          deepAssign(target[k],val);
+        }else{
+          target[k] = val;
+        }
+      }
+    }
+  }
+  return target;
+}
+// 判断是否对象
+export function isObject(val){
+  return val && typeof val === 'object' && !Array.isArray(val);
+}
+// 判断是否是简单对象（非实例）
+export function isSimpleObject(val){
+  return isObject(val)&&val.__proto__ == Object.prototype;
+}

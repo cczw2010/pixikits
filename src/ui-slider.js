@@ -1,6 +1,6 @@
 import {Container,Graphics} from "pixi.js";
 import {dragable} from "./eventsExt.js";
-import {drawSprite} from "./global.js";
+import {drawSprite,deepAssign} from "./global.js";
 
  class Slider extends Container{
   /**
@@ -18,23 +18,17 @@ import {drawSprite} from "./global.js";
       return;
     }
     super();
-    this._optionsBackground = Slider.__defOptions.background;
-    this._optionsBar = Slider.__defOptions.bar;
-    this._dir = Slider.__defOptions.dir;
-    this._alpha = Slider.__defOptions.alpha;
-    this._alphaActive = Slider.__defOptions.alphaActive;
-    
+    this._params = deepAssign({},Slider.__defOptions);
     this.background = null;
     this.bar = null;
     this.maxMovement = 0;
     this.percent = 0; //当前百分比
-    this.cb = null;
 
     // 刷新绘制slider
     this.refresh(params);
     dragable(this.bar,{
-      x:this._dir==Slider.H,
-      y:this._dir==Slider.V,
+      x:this._params.dir==Slider.H,
+      y:this._params.dir==Slider.V,
       onStart:(e)=>{
         this.setActive(true);
       },
@@ -42,14 +36,14 @@ import {drawSprite} from "./global.js";
         if(this.maxMovement==0){
           return false;
         }
-        if(e.nextPosition[this._dir]<0){
-          e.nextPosition[this._dir]=0;
+        if(e.nextPosition[this._params.dir]<0){
+          e.nextPosition[this._params.dir]=0;
         }
-        if(e.nextPosition[this._dir]>this.maxMovement){
-          e.nextPosition[this._dir] = this.maxMovement;
+        if(e.nextPosition[this._params.dir]>this.maxMovement){
+          e.nextPosition[this._params.dir] = this.maxMovement;
         }
-        this.setPercent(e.nextPosition[this._dir]/this.maxMovement);
-        this.cb&&this.cb(this.percent);
+        this.setPercent(e.nextPosition[this._params.dir]/this.maxMovement);
+        this._params.cb&&this._params.cb(this.percent);
         // return false;
       },
       onEnd:(e)=>{
@@ -59,38 +53,32 @@ import {drawSprite} from "./global.js";
   }
   // 重新设置参数，并刷新
   refresh(params={}){
-    Object.assign(this._optionsBackground,params.background);
-    Object.assign(this._optionsBar,params.bar);
-    if(!Number.isInteger(this._optionsBackground.t)){
-      if(!this._optionsBackground.width){
-        this._optionsBackground.width = this._optionsBackground.t.width;
+    const _params = deepAssign(this._params,params);
+    if(!Number.isInteger(_params.background.texture)){
+      if(!_params.background.width){
+        _params.background.width = _params.background.texture.width;
       }
-      if(!this._optionsBackground.height){
-        this._optionsBackground.height = this._optionsBackground.t.height;
-      }
-    }
-    if(!Number.isInteger(this._optionsBar.t)){
-      if(!this._optionsBar.width){
-        this._optionsBar.width = this._optionsBar.t.width;
-      }
-      if(!this._optionsBar.height){
-        this._optionsBar.height = this._optionsBar.t.height;
+      if(!_params.background.height){
+        _params.background.height = _params.background.texture.height;
       }
     }
-    this._dir = "dir" in params?params.dir:this._dir;
-    this._alpha = "alpha" in params?params.alpha:this._alpha;
-    this._alphaActive = "alphaActive" in params?params.alphaActive:this._alphaActive;
-
-    this.cb =  "cb" in params?params.cb:this.cb;
+    if(!Number.isInteger(_params.bar.texture)){
+      if(!_params.bar.width){
+        _params.bar.width = _params.bar.texture.width;
+      }
+      if(!_params.bar.height){
+        _params.bar.height = _params.bar.texture.height;
+      }
+    }
 
     this._drawBg();
     this._drawBar();
     this._center();
 
-    if(this._dir == Slider.V){
-      this.maxMovement = this._optionsBackground.height-this._optionsBar.height;
+    if(_params.dir == Slider.V){
+      this.maxMovement = _params.background.height-_params.bar.height;
     }else{
-      this.maxMovement = this._optionsBackground.width-this._optionsBar.width;
+      this.maxMovement = _params.background.width-_params.bar.width;
     }
     if(this.maxMovement<0){
       this.maxMovement = 0;
@@ -105,7 +93,7 @@ import {drawSprite} from "./global.js";
    * @param {boolean} active  是否激活状态
    */
   setActive(active=true){
-    this.alpha=active?this._alphaActive:this._alpha;
+    this.alpha=active?this._params.alphaActive:this._params.alpha;
   }
   /**
    * 手动设置百分比
@@ -115,7 +103,7 @@ import {drawSprite} from "./global.js";
     percent = this.maxMovement==0?0:percent;
     this.percent = percent;
     if(movebar){
-      this.bar.position[this._dir] = parseInt(this.maxMovement*percent);
+      this.bar.position[this._params.dir] = parseInt(this.maxMovement*percent);
     }
   }
 
@@ -125,7 +113,7 @@ import {drawSprite} from "./global.js";
       this.removeChild(this.bar);
       this.bar.destroy({children:true});
     }
-    this.bar = this.addChild(drawSprite(this._optionsBar.t,this._optionsBar.width,this._optionsBar.height));
+    this.bar = this.addChild(drawSprite(this._params.bar.texture,this._params.bar.width,this._params.bar.height));
   }
   // 绘制bg
   _drawBg(){
@@ -133,42 +121,39 @@ import {drawSprite} from "./global.js";
       this.removeChild(this.background);
       this.background.destroy({children:true});
     }
-    this.background = this.addChild(drawSprite(this._optionsBackground.t,this._optionsBackground.width,this._optionsBackground.height));
+    this.background = this.addChild(drawSprite(this._params.background.texture,this._params.background.width,this._params.background.height));
   }
 
   // 居中
   _center(){
-    const keyParam = this._dir==Slider.V?"width":"height";
+    const keyParam = this._params.dir==Slider.V?"width":"height";
     const offset = this.background[keyParam]-this.bar[keyParam];
     if(offset!=0){
       const item =offset>0?this.bar:this.background;
-      const keyPos = this._dir==Slider.V?"x":"y";
+      const keyPos = this._params.dir==Slider.V?"x":"y";
       item[keyPos] =  Math.abs(offset)/2;
     }
   }
 }
 Slider.H = "x";
 Slider.V = "y";
-// 拖动滚动条的默认样式
+// 默认样式
 Slider.__defOptions = {
   background:{
-    t:0x666666,  //Hex color|PIXI.Texture
-    width:0,     //宽度,如果 t 是材质，可以不设置使用材质自身宽度
-    height:0,    //高度,如果 t 是材质，可以不设置使用材质自身高度
+    texture:0xeeeeee, //Hex color|PIXI.Texture
+    width:0,          //宽度,如果 t 是材质，可以不设置使用材质自身宽度
+    height:0,         //高度,如果 t 是材质，可以不设置使用材质自身高度
   },
   bar:{
-    t:0Xff3300,
+    texture:0x666666,
     width:0,
     height:0,
   },
-  alpha:0.6,         //初始透明度
-  alphaActive:1,     //激活时候的透明度
+  alpha:1,            //初始透明度
+  alphaActive:1,      //激活时候的透明度
   percent:0,
   dir:Slider.H,
   cb:null
 };
-
-
-
 
 export {Slider};

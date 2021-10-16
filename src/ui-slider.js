@@ -1,4 +1,4 @@
-import {Container,Graphics} from "pixi.js";
+import {Container} from "pixi.js";
 import {dragable} from "./eventsExt.js";
 import {drawSprite,deepAssign} from "./global.js";
 
@@ -26,30 +26,6 @@ import {drawSprite,deepAssign} from "./global.js";
 
     // 刷新绘制slider
     this.refresh(params);
-    dragable(this.bar,{
-      x:this._params.dir==Slider.H,
-      y:this._params.dir==Slider.V,
-      onStart:(e)=>{
-        this.setActive(true);
-      },
-      onMove:(e)=>{
-        if(this.maxMovement==0){
-          return false;
-        }
-        if(e.nextPosition[this._params.dir]<0){
-          e.nextPosition[this._params.dir]=0;
-        }
-        if(e.nextPosition[this._params.dir]>this.maxMovement){
-          e.nextPosition[this._params.dir] = this.maxMovement;
-        }
-        this.setPercent(e.nextPosition[this._params.dir]/this.maxMovement);
-        this._params.cb&&this._params.cb(this.percent);
-        // return false;
-      },
-      onEnd:(e)=>{
-        this.setActive(false);
-      }
-    });
   }
   // 重新设置参数，并刷新
   refresh(params={}){
@@ -114,6 +90,30 @@ import {drawSprite,deepAssign} from "./global.js";
       this.bar.destroy({children:true});
     }
     this.bar = this.addChild(drawSprite(this._params.bar.texture,this._params.bar.width,this._params.bar.height));
+    dragable(this.bar,{
+      x:this._params.dir==Slider.H,
+      y:this._params.dir==Slider.V,
+      onStart:(e)=>{
+        this.setActive(true);
+      },
+      onMove:(e)=>{
+        if(this.maxMovement==0){
+          return false;
+        }
+        if(e.nextPosition[this._params.dir]<0){
+          e.nextPosition[this._params.dir]=0;
+        }
+        if(e.nextPosition[this._params.dir]>this.maxMovement){
+          e.nextPosition[this._params.dir] = this.maxMovement;
+        }
+        this.setPercent(e.nextPosition[this._params.dir]/this.maxMovement);
+        this._params.cb&&this._params.cb(this.percent);
+        // return false;
+      },
+      onEnd:(e)=>{
+        this.setActive(false);
+      }
+    });
   }
   // 绘制bg
   _drawBg(){

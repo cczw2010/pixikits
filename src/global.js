@@ -53,8 +53,7 @@ export function deepAssign(target,...rest){
       for(let k in obj){
         let val = obj[k];
         if(isSimpleObject(val)){
-          target[k] = val;
-          deepAssign(target[k],val);
+          target[k] = deepAssign({},target[k],val);
         }else{
           target[k] = val;
         }

@@ -7,18 +7,35 @@
 
   rollup 打包，使用es6模式开发
 
-## 注意！
+## 注意！ 
 
->事件体系
+**\* 特别注意！ `V2.0`和`V1.0`版本不兼容**
 
-事件系统选择使用6.1.*新增的 `EventSystem(@pixi/events)。该插件官方还没正式发布,也没有正式集成到pixi6，官方声明pixi7才会正式集成。貌似pixi的next分支集成了该插件，未测试。所以在集成前需要在页面上显示的引入。关于该事件体系的具体说明看[这里](http://www.shukantpal.com/blog/pixijs/federated-events-api/). 
-
-**\* 特别注意！ 使用本库之后旧的事件系统将失效，转为使用`addEventListener`方法,所以老的项目慎重使用**
-
-**\* 官方是针对`pixijs6+`实现的`EventSystem`，本库经过测试前端使用`5.2.5+`都可正常运行，但不保证**
+**\* 事件系统选择使用6.1.*新增的 `EventSystem(@pixi/events)`**
+>官方是针对`pixijs6+`实现的`EventSystem`，该插件没有正式集成到pixi6，官方声明pixi7才会正式集成。貌似pixi的next分支集成了该插件，未测试。所以在集成前需要在页面上显示的引入。关于该事件体系的具体说明看[这里](http://www.shukantpal.com/blog/pixijs/federated-events-api/).<br>
+>本库经过测试前端使用`5.2.5+`都可正常运行，但不保证
 
 
-## Example
+
+## Changed v2.0
+本版本与`1.0.x`版本不兼容，重构了太多的API。
+	
+####fixed
+
+1. `dragable`对本对象其他事件的影响
+  
+####reBuild
+
+1. `Slider`
+2. `Scroller`
+
+####new
+
+1. add `ProgressBar` class
+2. add some common function
+
+
+## 开始
 
 ### node ES6
 
@@ -84,12 +101,12 @@
 ### <div style="color:blue">Members</div>
 Name | Value| Desc |
 ---|:---|:---|
-**`isSkew`** | Boolean | 是否翻转了stage, 受`keepScreen`方法影响  |
+**`isSkew`** | Boolean | 是否翻转了stage, 受`keepScreen`方法影响，未调用前无效 |
 
 ### <div style="color:blue">Methods</div>
 
 #### PixiKits.init(app)
-初始化，必须在使用之前调用该方法初始化，初始化之后将使用新的事件系统**`EventSystem(@pixi/events)`**，可能会影响已有的使用老的事件系统的代码
+初始化，**必须首先调用该方法初始化**，初始化之后将使用新的事件系统**`EventSystem(@pixi/events)`**，可能会影响已有的使用老的事件系统的代码
 
 Name | Type  | Attributes | Default | Desc |
 ---|:---|:---|:---|:---|
@@ -109,15 +126,15 @@ Name  | Attributes| Type | Default | Desc |
 ---|:---|:---|:---|:---|
 |**`object`** | <mark>required</mark> |Pixi.DisplayObject |  | 要实现拖拽功能的对象
 |**`params`** | \<optional> |Object |  | 相关参数
-| | dragX  | Boolean | true | 是否开启横向拖拽
-| | dragY  | Boolean | true | 是否开启纵向拖拽
+| | x  | Boolean | true | 是否开启横向拖拽
+| | y  | Boolean | true | 是否开启纵向拖拽
 | | onStart | Function \| Null | null | 拖拽开始的回调
 | | onMove  |Function \| Null | null | 拖拽中的回调.返回`false`会阻止自动拖拽行为， `event.nextPosition`代表下一个位置的local坐标对象，`e.distance`代表移动的总距离对象
 | | onEnd  |Function \| Null | null | 开始结束的回调，`e.distance`代表移动的总距离对象
 
 
 #### PixiKits.tap(object,cb)
-使对象可点击，主要针对新事件体系click做了移动端兼容（当前阶段事件体系的click移动端不是很好用）
+使对象可点击，主要针对新事件体系click做了移动端兼容（当前阶段事件体系的`tap`移动端不是很好用）
 
 Name | Type | Attributes | Default | Desc |
 ---|:---|:---|:---|:---|
@@ -222,7 +239,7 @@ Name | Type | Attributes | Default | Desc |
 ---|:---|:---|:---|:---|
 **`params`** |Object|\<optional> |  |样式设定，参见构造函数| 
 
-#### Slider. addChild(...)
+#### Slider. addChild(...) `overrides`
 重写了`Container.addChild`方法,会自动调用`refresh`方法刷新滚动条
 
 ### <div style="color:red">PixiKits.ProgressBar</div> 

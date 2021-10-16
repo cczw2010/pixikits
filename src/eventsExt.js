@@ -53,13 +53,15 @@ function initEvent(){
       // _dragEnd(e);
       return false;
     }
+    e.preventDefault();
+    e.stopPropagation();
     const dragdata = EventDatas.drag;
     const elocal = dragdata.item.parent.toLocal(e.global, null);
     let nextPosition = dragdata.item.position.clone();
-    if(dragdata.autoMoveX){
+    if(dragdata.x){
       nextPosition.x = elocal.x - dragdata.startOffset.x;
     }
-    if(dragdata.autoMoveY){
+    if(dragdata.y){
       nextPosition.y = elocal.y - dragdata.startOffset.y;
     }
     e.nextPosition = nextPosition;
@@ -91,29 +93,29 @@ function initEvent(){
  *  }
  */
  function dragable(object,params={}){
-  if(object.isDragable){return false;}
-  object.isDragable = true;
   object.interactive = true;
   object.addEventListener('pointerdown', (e)=>{
     e.preventDefault();
-    e.stopPropagation();  //必须，不然多层嵌套拖动会出现问题
-    const startLocal = e.target.parent.toLocal(e.global, null);
-    const startPosition = e.target.position;
-    const startOffset = {x:startLocal.x-startPosition.x,y:startLocal.y-startPosition.y};
-    // console.log("starting",startLocal,startPosition,startOffset);
-    Object.assign(EventDatas.drag,{
-      startOffset,
-      startLocal,
-      item:object,
-      autoMoveX:params.x===false?false:true,
-      autoMoveY:params.y===false?false:true,
-      onMove:params.onMove,
-      onEnd:params.onEnd
-    });
-    params.onStart&&params.onStart(e);
+    if(!EventDatas.drag.item){
+      const startLocal = e.target.parent.toLocal(e.global, null);
+      const startPosition = e.target.position;
+      const startOffset = {x:startLocal.x-startPosition.x,y:startLocal.y-startPosition.y};
+      Object.assign(EventDatas.drag,{
+        startOffset,
+        startLocal,
+        item:object,
+        x:params.x===false?false:true,
+        y:params.y===false?false:true,
+        onMove:params.onMove,
+        onEnd:params.onEnd
+      });
+      params.onStart&&params.onStart(e);
+    // object.addEventListener('pointerup', _dragEnd);
+    // object.addEventListener('pointerout', _dragEnd);
+    }
+    // e.stopPropagation();
+    // return;
   },false);
-  // object.addEventListener('pointerup', _dragEnd);
-  // object.addEventListener('pointerout', _dragEnd);
 }
 
 /**

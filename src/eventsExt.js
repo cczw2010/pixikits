@@ -8,7 +8,6 @@ import { Renderer } from '@pixi/core';
 import {EventSystem} from "@pixi/events";
 // If you are using the pixi.js/pixi.js-legacy bundles, you'll need to remove the interaction
 // plugin. This is not needed when using the scoped (@pixi/) packages directly.
-// delete PIXI.Renderer.__plugins.interaction;
 delete Renderer.__plugins.interaction;
 // 初始化基础事件
 const EventDatas = {

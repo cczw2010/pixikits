@@ -2,17 +2,18 @@
 ## 开发环境
 
   pixijs  6.1.3
-  
+
   @pixi/events 6.1.3
 
   rollup 打包，使用es6模式开发
 
 ## 注意！ 
 
-**\* 特别注意！ `V2.0`和`V1.0`版本不兼容**
+*** 特别注意！ `V2.0`和`V1.0`版本不兼容**
 
-**\* 事件系统选择使用6.1.*新增的 `EventSystem(@pixi/events)`**
->官方是针对`pixijs6+`实现的`EventSystem`，该插件没有正式集成到pixi6，官方声明pixi7才会正式集成。貌似pixi的next分支集成了该插件，未测试。所以在集成前需要在页面上显示的引入。关于该事件体系的具体说明看[这里](http://www.shukantpal.com/blog/pixijs/federated-events-api/).<br>
+**\* 事件系统选择使用6.1.*新增的 `Federated Events (@pixi/events)`**
+
+>官方是针对`pixijs6+`实现的`Federated Events `，该插件没有正式集成到pixi6，官方声明pixi7才会正式集成。貌似pixi的next分支集成了该插件，未测试。所以在集成前需要在页面上显示的引入。关于该事件体系的具体说明看[这里](http://www.shukantpal.com/blog/pixijs/federated-events-api/).<br>
 >本库经过测试前端使用`5.2.5+`都可正常运行，但不保证
 
 
@@ -23,7 +24,7 @@
 ####fixed
 
 1. `dragable`对本对象其他事件的影响
-  
+
 ####reBuild
 
 1. `Slider`
@@ -79,13 +80,15 @@
 1. 页面上显示引入@pixi/events插件的browser文件和pixikits的brower文件
 
 		<script src=".../pixi.js"></script>
+
  		<script src=".../events.js"></script> //here(./assets/events.js)
-		<script src=".../pixikits.js"></script>
+ 		<script src=".../pixikits.js"></script>
 
  
+
 2. 初始化后，通过 `PixiKits` 对象调用
 
-    	
+   
     	const app = new PIXI.Application();
     	document.body.appendChild(app.view);
     	<!--先初始化-->
@@ -148,39 +151,53 @@ Name | Type | Attributes | Default | Desc |
 ### <div style="color:red">PixiKits.Slider</div>
 基于`dragable`实现的滚动条类，继承`PIXI.Container`
 
-	const params = {length:200,lengthBar:20,width:10,color:0xffffff,colorBar:0Xff3300};
-	const slider = new PixiKits.Slider(params,(percent)=>{
-		console.log(percent);
-	})
+	const params = {
+					background:{
+						texture:0xeeeeee,
+						width:20,
+						height:200
+					},
+					bar:{
+						texture:0xeeeeee,
+						width:16,
+						height:50
+					},
+					alpha:0.6,
+					dir:Slider.V,
+					cb:(percent)=>{
+	                	console.log(percent);
+	                }
+				};
+	const slider = new PixiKits.Slider(params);
 	app.stage.addChild(slider);
 
 ### <div style="color:blue">Constructor</div>
-Name | Attributes | Type | Default | Desc |
----|:---|:---|:---|:---|
-|**`params`** |<mark>\<required></mark>  |Object|  |样式设定 
-||barkground | Object |  | 滚动条背景样式
-| |   - - -  texture | Hex color \| Texture \| Graphics \| Array| 0xeeeeee | 滚动条背景材质样式
-| |   - - -  width| Number | 0 | 显示宽度 ，如果 `texture `不是颜色，可以不设置使用`texture `自身宽度
-| |   - - -  height | Number | 0 | 显示高度 ，如果 `texture `不是颜色，可以不设置使用`texture `自身高度
-| |bar | Object |  | 滚动块样式
-| |   - - -  texture | Hex color \| Texture \| Graphics \| Array| 0x666666 | 滚动块样式
-| |   - - -  width| Number | 0 | 显示宽度 ，如果 `texture `不是颜色，可以不设置使用`texture `自身宽度
-| |   - - -  height | Number | 0 | 显示高度 ，如果 `texture `不是颜色，可以不设置使用`texture `自身高度
-| |alpha  | Number | 1 | 初始透明度0~1 
-| |alphaActive  | Number | 1 | 激活后的透明度0~1 
-||dir | String | Slider.H | 滚动条的滚动方向
-||alpha| Float | 1 | 初始透明度0~1 
-||alphaActive| Float | 1 | 激活后的透明度0~1 
-||cb| \<optional>  |Function | null | 滚动是的回调函数,传入`percent`参数|
+Name | Attributes | Type | Default | Desc 
+---|:---|:---|:---|:---
+**`params`** |<mark>\<required></mark>  |Object|  |滚动条样式参数对象 
+|barkground | Object |  | 滚动条背景 
+ |   - - -  texture | Hex color \| Texture \| Graphics \| Array<Texture> | 0xeeeeee | 滚动条背景样式 
+ |   - - -  width| Number | 0 | 显示宽度 ，如果 `texture `不是颜色，可以不设置使用`texture `自身宽度
+ |   - - -  height | Number | 0 | 显示高度 ，如果 `texture `不是颜色，可以不设置使用`texture `自身高度
+ |bar | Object |  | 滚动块 
+ |   - - -  texture | Hex color \| Texture \| Graphics \| Array<Texture> | 0x666666 | 滚动块样式
+ |   - - -  width| Number | 0 | 显示宽度 ，如果 `texture `不是颜色，可以不设置为`0`,使用`texture `自身宽度 
+ |   - - -  height | Number | 0 | 显示高度 ，如果 `texture `不是颜色，可以设置为`0`,使用`texture `自身高度 
+ |alpha  | Number | 1 | 初始透明度0~1 
+ |alphaActive  | Number | 1 | 激活后的透明度0~1 
+|dir | String | Slider.H | 滚动条滑动的滚动方向`Slider.H |Slider.V` 
+|alpha| Float | 1 | 初始透明度0~1 
+|alphaActive| Float | 1 | 激活后的透明度0~1 
+|cb| Function |null | 滚动回调，参数 为`percent` 
 
 ### <div style="color:blue">Members</div>
-	
-Name | Value| Desc |
----|:---|:---|
-**`percent`** | Float | 当前滚动条百分比0~1  |
-**`maxMovement`** | Number | 当前滚动条最大滚动长度  |
-**`bg`** | Graphics | 背景对象  |
-**`bar`** | Graphics | 滚动块对象  |
+
+Name | Value| Desc 
+---|:---|:---
+**`percent`** | Float | 当前滚动条百分比0~1  
+**`maxMovement`** | Number | 当前滚动条可滚动长度 
+**`background`** | Graphics\|Sprite | 滚动条背景对象 
+**`bar`** | Graphics\|Sprite | 滚动块对象  
 
 
 ### <div style="color:blue">Methods</div>
@@ -188,16 +205,16 @@ Name | Value| Desc |
 #### Slider.refresh(params)
 刷新slider参数设置
 
-Name | Type | Attributes | Default | Desc |
----|:---|:---|:---|:---|
-**`params`** |Object|\<optional> |  |样式设定，参见构造函数| 
+Name | Type | Attributes | Default | Desc 
+---|:---|:---|:---|:---
+**`params`** |Object|\<optional> |  |样式设定，参见构造函数，可增量更新
 
 #### Slider.setPercent(percent,movebar)
 刷新slider参数设置
 
-Name | Type | Attributes | Default | Desc |
----|:---|:---|:---|:---|
-**`percent`** | Float |<mark>\<required></mark> | 0 | 当前百分比 0~1
+Name | Type | Attributes | Default | Desc 
+---|:---|:---|:---|:---
+**`percent`** | Float |<mark>\<required></mark> |  | 当前百分比 0~1
 **`movebar `** |Boolean|\<optional> |  true | 是否同时刷新滚动块位置, 一般用于第三方开发扩展
 
 
@@ -211,56 +228,73 @@ Name | Type | Attributes | Default | Desc |
 ### <div style="color:red">PixiKits.Scroller</div> 
 基于`dragable`和`Slider`实现的滚动条类，继承`PIXI.Container`
 
-	const params = {width:500,height:300,x:true,y:false,sliderBar:false};
+	const params = {
+		width:350,
+		height:200,
+		background:Texture.WHITE,
+		x:{
+			background:{
+				texture:Texture.WHITE,
+				height:10,
+			},
+			bar:{
+	      		texture:0xff3366,
+				height:10
+			}
+		},
+		y:false
+	};
 	const scroller = new PixiKits.Scroller(params);
 	app.stage.addChild(scroller);
 	scroller.addChild(...);
 
 ### <div style="color:blue">Constructor</div>
-Name | Attributes | Type | Default | Desc |
----|:---|:---|:---|:---|
-|**`params`**|\<optional>  |Object|  |样式设定
-| |width | Number | 300 | 内容区域宽度
-| |height | Number | 200 | 内容区域高度
-| |x | Boolean | true | 是否开启横向滚动
-| |y | Boolean | true| 是否开启纵向滚动
-| |bgColor | Hex | 0Xffffff| 背景颜色
-| |slideBar | Object \| Boolean | false | 如需显示滚动条，传入`Slider`对象的参数对象，`{}`代表使用`Slider`的默认参数
+Name | Attributes | Type | Default | Desc 
+---|:---|:---|:---|:---
+**`params`**|<mark>\<required></mark>  |Object|  |参数对象
+ |width | Number | 350 | 内容区域宽度
+ |height | Number | 200 | 内容区域高度
+ |x | Boolean\|Object | {...} | 是否开启横向滚动，传入`Slider`的配置对象会绘制滚动条（width`和`dir`参数会自动设定），不设定该参数会有一个默认的滚动条 
+ |y | Boolean\|Object | {...} | 是否开启纵向滚动，传入`Slider`的配置对象会绘制滚动条（`height`和`dir`参数会自动设定），不设定该参数会有一个默认的滚动条 
+ |background | Hex color \|Texture \|Graphics \|Array<Texture> |  | 背景材质 
+ |drag | Boolean | true | 内容区域是否可以拖动 
 
 ### <div style="color:blue">Members</div>
-	
-Name | Value| Desc |
----|:---|:---|
-**`percent`** | Object | 当前Scroller的横向和纵向百分比  |
-**`sliders`** | Object | 横向和纵向滚动条对象（如果有的话）  |
-**`content`** | PIXI.Container | 内容区域容器对象 |
+
+Name | Value| Desc 
+---|:---|:---
+**`percent`** | Object | 当前Scroller的横向和纵向百分比`{x,y}` 
+**`sliderX`** | Object\|Null | 横向滚动条对象（如果有的话）  
+**`sliderY`** | Object\|Null | 横向滚动条对象（如果有的话） 
+**`content`** | Container | 内容区域容器对象 
+**`background`** | Sprite\|Graphics | 背景对象 
 
 ### <div style="color:blue">Methods</div>
 
-#### Scroller.refresh(params)
-刷新Scroller，该方法会重新计算内容尺寸和滚动条位置。比如内部的对象自己新增子对象或者自己变换尺寸时Scroller是无感的，需要手动调用本方法计算 刷新UI。也可传入参数重新设定样式。
+#### Scroller.refresh(params={})
+刷新Scroller，该方法会重新计算内容尺寸和滚动条。 适用于增加非直接子对象时，比如内部的对象自己新增子对象或者自己变换尺寸时，这时`Scroller`是无感的，需要手动调用本方法重新计算 刷新UI。当然也可传入参数局部刷新设定参数。
 
-Name | Type | Attributes | Default | Desc |
----|:---|:---|:---|:---|
-**`params`** |Object|\<optional> |  |样式设定，参见构造函数| 
+Name | Type | Attributes | Default | Desc 
+---|:---|:---|:---|:---
+**`params`** |Object|\<optional> |  |参见构造函数
 
 #### Slider. addChild(...) `overrides`
-重写了`Container.addChild`方法,会自动调用`refresh`方法刷新滚动条
+重写了`Container.addChild`方法,该方法会自动调用`refresh`方法刷新滚动条
 
 ### <div style="color:red">PixiKits.ProgressBar</div> 
 继承`PIXI.Container`实现的进度条类
 
 	const processBar = new PixiKits.ProgressBar({
-      width:200,
-      height:20,
-      percent:0.5,
-      background:PIXI.utils.TextureCache.input,
-      progress:PIXI.utils.TextureCache.progress,
-      icon:resources.spritesheet.spritesheet.animations.iconfly
-    });
-    processBar.icon.animationSpeed =0.2;
-    //processBar.setPercent(0.5);
-    app.stage.addChild(processBar);
+	  width:200,
+	  height:20,
+	  percent:0.5,
+	  background:PIXI.utils.TextureCache.input,
+	  progress:PIXI.utils.TextureCache.progress,
+	  icon:resources.spritesheet.spritesheet.animations.iconfly
+	});
+	processBar.icon.animationSpeed =0.2;
+	//processBar.setPercent(0.5);
+	app.stage.addChild(processBar);
 
 ### <div style="color:blue">Constructor</div>
 Name | Attributes | Type | Default | Desc |
@@ -273,7 +307,7 @@ Name | Attributes | Type | Default | Desc |
 | | progress | Hex \| PIXI.Texture \| Array\<PIXI.Texture>e=| 0x65d521| 滚动条素材
 | | icon | PIXI.Texture \| Array\<PIXI.Texture> | null | 可以在进度条前设置一个前进的图标
 ### <div style="color:blue">Members</div>
-	
+
 Name | Value| Desc |
 ---|:---|:---|
 **`percent`** | Float | 当前进度0~1  |
@@ -308,13 +342,13 @@ Name | Type | Attributes | Default | Desc |
 继承`PIXI.Container`实现的一个拼合精灵简单对象，用于过大的图片素材分割后组成一个精灵，会根据当前显示区域的位置显示对应精灵切片，不会一次性全部绘制。(比如超长的一镜到底复杂背景图)
 
 	const bg = new PixiKits.SpliceSprite(
-      resources.spritesheet.spritesheet.animations.bg,
-      //resources:{a:t1,b:t2...}
-      //resources:[t1,t2,t3,...]
-      PixiKits.SpliceSprite.V
-    );
-    //bg.position.set(0,0);
-    app.stage.addChild(bg);
+	  resources.spritesheet.spritesheet.animations.bg,
+	  //resources:{a:t1,b:t2...}
+	  //resources:[t1,t2,t3,...]
+	  PixiKits.SpliceSprite.V
+	);
+	//bg.position.set(0,0);
+	app.stage.addChild(bg);
 
 ### <div style="color:blue">Constructor</div>
 Name | Attributes | Type | Default | Desc |

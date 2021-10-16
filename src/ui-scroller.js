@@ -1,6 +1,6 @@
 import {dragable} from "./eventsExt.js";
 import {Slider} from "./ui-slider.js";
-import {Container,Graphics} from "pixi.js";
+import {Container,Graphics,Texture} from "pixi.js";
 import {drawSprite,deepAssign} from "./global.js";
 
 /**
@@ -17,19 +17,22 @@ class Scroller extends Container{
    *    height,  //高度
    *    x:true|Object,             //是否开启横向滚动，传入Slider对象的配置参数才会显示滚动条
    *    y:true|Object,             //是否开启纵向滚动，传入Slider对象的配置参数才会显示滚动条
-   *    bacground:0xFFFFFF|Texture //背景
+   *    bacground:0xFFFFFF|Texture|Graphics //背景
+   *    drag:true,                 //是否开启内容拖拽
    *  }
    * @memberof Scroller
    */
   constructor(params){
-    if(typeof params != "object" && !params.width && !params.height){
-      console.log("params must be required!");
-      return;
-    }
     super();
+    if(typeof params != "object"){
+      console.error("params must be required!");
+      // return;
+    }
     this._params = deepAssign({},Scroller.__defOptions);
     // 内容最大滚动坐标
     this._contentLimitPos ={x:0,y:0};
+    // 背景
+    this.background = null;
     // 内容容器
     this.content = super.addChild(new Container());
     this.content.zIndex = 2;
@@ -43,12 +46,12 @@ class Scroller extends Container{
     // 刷新UI
     this.refresh(params);
     // 内容区域可拖动
-    if(this._params.contentDrag){
-      dragable(this,{
-        onStart:(e)=>{
-          this.startPos = this.content.position.clone();
-        },
-        onMove:(e)=>{
+    dragable(this,{
+      onStart:(e)=>{
+        this.startPos = this.content.position.clone();
+      },
+      onMove:(e)=>{
+        if(this._params.drag){
           if(this._params.x && this._contentLimitPos.x){
             let posx = this.startPos.x+e.distance.x;
             posx=posx>0?0:(posx<this._contentLimitPos.x?this._contentLimitPos.x:posx);
@@ -60,11 +63,11 @@ class Scroller extends Container{
             this.percent.y = posy/this._contentLimitPos.y;
           }
           this._refreshPercent();
-          return false;
-        },
-        // onEnd:(e)=>{}
-      });
-    }
+        }
+        return false;
+      },
+      // onEnd:(e)=>{}
+    });
    
   }
   // 重写addChild，自动刷新容器
@@ -130,12 +133,12 @@ class Scroller extends Container{
   }
   // 绘制或者更新背景
   _drawBg(){
-    if(this.bg){
-      this.removeChild(this.bg);
-      this.bg.destroy();
+    if(this.background){
+      this.removeChild(this.background);
+      this.background.destroy();
     }
-    this.bg = super.addChild(drawSprite(this._params.background,this._params.width, this._params.height));
-    this.bg.zIndex=1;
+    this.background = super.addChild(drawSprite(this._params.background,this._params.width, this._params.height));
+    this.background.zIndex=1;
   }
   // 绘制或者更新mask
   _drawMask(){
@@ -196,10 +199,10 @@ Scroller.__defOptions = {
   width:350,
   height:200,
   background:0xFFFFFF,    //默认白色
-  contentDrag:true,   //内容区域是否可拖动,设置后不可更改
+  drag:true,   //内容区域是否可拖动,设置后不可更改
   x:{
     background:{
-      // texture:Texture.EMPTY,
+      texture:Texture.EMPTY,
       // width, auto set
       height:10,
     },
@@ -226,7 +229,7 @@ Scroller.__defOptions = {
     alpha:0.8,            //初始透明度
     alphaActive:1,      //激活时候的透明度
     // dir,  auto set
-  },
+  }
 };
 
 export {Scroller};

@@ -1,5 +1,5 @@
 import {Container,Graphics} from "pixi.js"
-import {drawSprite} from "./global.js";
+import {drawSprite,isNumber} from "./global.js";
 // 默认参数
 const defaultParams = {
   percent:0,
@@ -75,7 +75,7 @@ export class ProgressBar extends Container{
 
   // 设置进度 
   setPercent(percent){
-    if(percent){
+    if(isNumber(percent)){
       this.percent = percent;
     }
     progressMask.clear();

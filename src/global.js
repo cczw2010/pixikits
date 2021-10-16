@@ -1,4 +1,4 @@
-import {Texture,Sprite,AnimatedSprite} from "pixi.js"
+import {Texture,Sprite,AnimatedSprite,Graphics} from "pixi.js"
 
 // global variable
 export let app = null;   //Application instance
@@ -71,4 +71,8 @@ export function isObject(val){
 // 判断是否是简单对象（非实例）
 export function isSimpleObject(val){
   return isObject(val)&&val.__proto__ == Object.prototype;
+}
+// 判断是否真实数字
+export function isNumber(val){
+  return typeof val === 'number' && !isNaN(val);
 }

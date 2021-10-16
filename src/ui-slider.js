@@ -1,6 +1,6 @@
 import {Container} from "pixi.js";
 import {dragable} from "./eventsExt.js";
-import {drawSprite,deepAssign} from "./global.js";
+import {drawSprite,deepAssign,isNumber} from "./global.js";
 
  class Slider extends Container{
   /**
@@ -13,11 +13,11 @@ import {drawSprite,deepAssign} from "./global.js";
   *    cb:            - callback 
   */
   constructor(params){
+    super();
     if(!params){
       console.error("params is required!");
-      return;
+      // return;
     }
-    super();
     this._params = deepAssign({},Slider.__defOptions);
     this.background = null;
     this.bar = null;
@@ -75,11 +75,13 @@ import {drawSprite,deepAssign} from "./global.js";
    * 手动设置百分比
    */
   setPercent(percent,movebar=true){
-    percent =percent>1?1:(percent<0?0:percent);
-    percent = this.maxMovement==0?0:percent;
-    this.percent = percent;
+    if(isNumber(percent)){
+      percent =percent>1?1:(percent<0?0:percent);
+      percent = this.maxMovement==0?0:percent;
+      this.percent = percent;
+    }
     if(movebar){
-      this.bar.position[this._params.dir] = parseInt(this.maxMovement*percent);
+      this.bar.position[this._params.dir] = parseInt(this.maxMovement*this.percent);
     }
   }
 

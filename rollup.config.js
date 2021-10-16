@@ -15,7 +15,7 @@ import nodeGlobals from 'rollup-plugin-node-globals';
 import json from '@rollup/plugin-json';
 import { terser } from "rollup-plugin-terser";  //压缩
 
-const version = "1.0.1";
+const version = "2.0.0";
 
 export default {
   input: 'src/index.js',

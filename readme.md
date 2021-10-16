@@ -157,16 +157,21 @@ Name | Type | Attributes | Default | Desc |
 ### <div style="color:blue">Constructor</div>
 Name | Attributes | Type | Default | Desc |
 ---|:---|:---|:---|:---|
-|**`params`** |\<optional> |Object|  |样式设定
-| |length |  Number | 200 | 滚动条总长度
-| |lengthBar | Number | 20 | 滚动块的长度，可根据内容区域大小比来设定
-| |width | Number | 10| 滚动条的宽度
-| |widthBar | Number | 0 | 默认0，与with相同
-| |color  |Hex| 0xffffff | 滚动条颜色
-| |colorBar | Hex | 0Xff3300 | 滚动块颜色
-| |alpha  | Number | 0.4 | 初始透明度0~1
-| |alphaActive  | Number | 0.8 | 激活后的透明度0~1
-|**cb**| \<optional>  |Function | null | 滚动是的回调函数,传入`percent`参数|
+|**`params`** |<mark>\<required></mark>  |Object|  |样式设定 
+||barkground | Object |  | 滚动条背景样式
+| |   - - -  texture | Hex color \| Texture \| Graphics \| Array| 0xeeeeee | 滚动条背景材质样式
+| |   - - -  width| Number | 0 | 显示宽度 ，如果 `texture `不是颜色，可以不设置使用`texture `自身宽度
+| |   - - -  height | Number | 0 | 显示高度 ，如果 `texture `不是颜色，可以不设置使用`texture `自身高度
+| |bar | Object |  | 滚动块样式
+| |   - - -  texture | Hex color \| Texture \| Graphics \| Array| 0x666666 | 滚动块样式
+| |   - - -  width| Number | 0 | 显示宽度 ，如果 `texture `不是颜色，可以不设置使用`texture `自身宽度
+| |   - - -  height | Number | 0 | 显示高度 ，如果 `texture `不是颜色，可以不设置使用`texture `自身高度
+| |alpha  | Number | 1 | 初始透明度0~1 
+| |alphaActive  | Number | 1 | 激活后的透明度0~1 
+||dir | String | Slider.H | 滚动条的滚动方向
+||alpha| Float | 1 | 初始透明度0~1 
+||alphaActive| Float | 1 | 激活后的透明度0~1 
+||cb| \<optional>  |Function | null | 滚动是的回调函数,传入`percent`参数|
 
 ### <div style="color:blue">Members</div>
 	

@@ -6,7 +6,7 @@ import {drawSprite,deepAssign} from "./global.js";
   /**
    *拖动滚动条Slider,实例对象是容器Container的子类
   * @param {object} params
-  *    barkground: {...} - options for background
+  *    background: {...} - options for background
   *    bar:{...},     - options for bar
   *    dir:Slider.H,  - direction
   *    percent:0，    - percent

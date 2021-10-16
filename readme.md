@@ -97,7 +97,7 @@
     	PixiKits.keepScreen("h");
     	...
 
-3. [Demo](https://codepen.io/cczw2010/pen/RwZPGbR)
+3. [Demo](https://codepen.io/cczw2010/pen/gOxaGKd)
 
 ## Document
 

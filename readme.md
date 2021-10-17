@@ -339,12 +339,13 @@ Name | Type | Attributes | Default | Desc |
 **`progress `** |Hex \| PIXI.Texture \| Array\<PIXI.Texture> | <mark>\<required></mark> |滚动条素材| 
 
 ### <div style="color:red">PixiKits.SpliceSprite</div> 
-继承`PIXI.Container`实现的一个拼合精灵简单对象，用于过大的图片素材分割后组成一个精灵，会根据当前显示区域的位置显示对应精灵切片，不会一次性全部绘制。(比如超长的一镜到底复杂背景图)
+继承`PIXI.Container`拼接图片精灵，用于多个的图片素材再拼接组成一个精灵. (比如超长的一镜到底复杂背景图，切片加载在拼装)
 
 	const bg = new PixiKits.SpliceSprite(
-	  resources.spritesheet.spritesheet.animations.bg,
-	  //resources:{a:t1,b:t2...}
-	  //resources:[t1,t2,t3,...]
+	  resources,
+		//{loader.Resources}
+	  //{a:t1,b:t2...}
+	  //[t1,t2,t3,...]
 	  PixiKits.SpliceSprite.V
 	);
 	//bg.position.set(0,0);
@@ -353,7 +354,7 @@ Name | Type | Attributes | Default | Desc |
 ### <div style="color:blue">Constructor</div>
 Name | Attributes | Type | Default | Desc |
 ---|:---|:---|:---|:---|
-|**`textures`** |<mark>\<required></mark> | Array\|Object|  |材质数组或者json对象
-|**`dir`** |<mark>\<required></mark> | Number| |方向 ` SpliceSprite.H` or ` SpliceSprite.V`
+|**`textures`** |<mark>\<required></mark> | Array\|Object|  |`Texure`或者`LoaderResource`的数组或者json对象
+|**`dir`** |\<optional> | Number| SpliceSprite.H|方向 ` SpliceSprite.H` or ` SpliceSprite.V`
 
  

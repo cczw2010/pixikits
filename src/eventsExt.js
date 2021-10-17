@@ -36,10 +36,10 @@ function initEvent(){
     if(EventDatas.drag){
       EventDatas.drag.onEnd&&EventDatas.drag.onEnd(e);
       EventDatas.drag = null;
-    }
-    // 本次pointer周期移动距离
-    if(Math.abs(e.global.x-EventDatas.startGlobal.x)>3 || Math.abs(e.global.y-EventDatas.startGlobal.y>3)){
-      EventDatas.isTap = false;
+      // 本次pointer周期移动距离
+      if(Math.abs(e.global.x-EventDatas.startGlobal.x)>3 || Math.abs(e.global.y-EventDatas.startGlobal.y>3)){
+        EventDatas.isTap = false;
+      }
     }
   };
   G.app.stage.addEventListener('pointerdown', (e)=>{
